@@ -1,0 +1,47 @@
+{%- raw -%}{% extends "accounts/base.html" %}
+{% load i18n %}
+
+{% block seo_title %}
+    {% trans "Account settings" %}
+{% endblock %}
+
+{% block headline %}
+    {% trans "Account settings" %}
+{% endblock %}
+
+{% block content %}
+    <div class="mb-5">
+        <h2 class="mb-3">{% trans "Personal information" %}</h2>
+        <div class="card">
+            <div class="card-body">
+                <p>
+                    <strong>First name:</strong> {{ user.first_name|default:"unset" }}
+                </p>
+                <p>
+                    <strong>Last name:</strong> {{ user.last_name|default:"unset" }}
+                </p>
+                <a href="{% url "accounts:user-update" %}" class="btn btn-primary">Update</a>
+            </div>
+        </div>
+
+        <hr>
+    </div>
+    <div class="mb-5">
+        <h2 class="mb-3">{% trans "Password management" %}</h2>
+        {% if not user.has_usable_password %}
+            <a class="btn btn-primary me-1" href="{% url "my-password-set" %}">Set password</a>
+        {% endif %}
+        <a href="{% url "account_change_password" %}" class="btn btn-primary">Change password</a>
+        <hr>
+    </div>
+    <div class="mb-5">
+        <h2 class="mb-3">{% trans "Email addresses" %}</h2>
+        <a href="{% url "account_email" %}" class="btn btn-primary">Manage Email Addresses</a>
+        <hr>
+    </div>
+
+        <div class="mb-5">
+        <h2 class="mb-3">{% trans "Social accounts" %}</h2>
+        <a href="{% url "socialaccount_connections" %}" class="btn btn-primary">Manage connected accounts</a>
+    </div>
+{% endblock %}{%- endraw -%}
