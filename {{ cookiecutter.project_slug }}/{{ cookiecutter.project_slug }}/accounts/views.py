@@ -36,3 +36,16 @@ class PasswordSetView(AllauthPasswordSetView):
 
 
 password_set_view = login_required(PasswordSetView.as_view())
+
+
+# Some dummy views to illustrate memberships
+
+
+@group_required("1")
+def standard_access(request):
+    return HttpResponse("OK")
+
+
+@group_required("2")
+def pro_access(request):
+    return HttpResponse("OK")
