@@ -14,6 +14,7 @@ fake = Faker()
 class ManagementTests(TestCase):
     @classmethod
     def setUpTestData(cls):
+        call_command("init_membership")
         user = User.objects.create(username=fake.user_name(), email=fake.ascii_email())
         cls.user = user
 
@@ -25,11 +26,10 @@ class ManagementTests(TestCase):
         self.assertEqual(site.domain, f"{settings.DOMAIN_NAME}:{settings.PORT_NUMBER}")
 
     def test_init_membership(self):
-        call_command("init_membership")
-
-        for group_name in settings.MEMBERSHIP_GROUPS.values():
+        for group_data in settings.MEMBERSHIP_GROUPS.values():
+            group_name = group_data["group_name"]
             group = Group.objects.filter(name=group_name).first()
             self.assertIsNotNone(group)
 
         group_names = [group.name for group in self.user.groups.all()]
-        self.assertIn(settings.DEFAULT_MEMBERSHIP_GROUP, group_names)
+        self.assertIn(settings.DEFAULT_MEMBERSHIP_GROUP["group_name"], group_names)

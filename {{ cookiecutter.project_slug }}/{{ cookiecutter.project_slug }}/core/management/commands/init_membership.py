@@ -9,7 +9,8 @@ User = get_user_model()
 class Command(BaseCommand):
     def _create_membership_groups(self):
         self.stdout.write("Creating membership groups.")
-        for group_name in settings.MEMBERSHIP_GROUPS.values():
+        for group_data in settings.MEMBERSHIP_GROUPS.values():
+            group_name = group_data["group_name"]
             Group.objects.get_or_create(name=group_name)
             self.stdout.write(f'Created group named "{group_name}".')
 
@@ -18,17 +19,18 @@ class Command(BaseCommand):
         Users who aren't part of any memberhsips will be
         added to the default one.
         """
-        group_names = settings.MEMBERSHIP_GROUPS.values()
-        default_group = Group.objects.get(name=settings.DEFAULT_MEMBERSHIP_GROUP)
+        group_names = [
+            group_data["group_name"]
+            for group_data in settings.MEMBERSHIP_GROUPS.values()
+        ]
+        default_group = Group.objects.get(
+            name=settings.DEFAULT_MEMBERSHIP_GROUP["group_name"]
+        )
         for user in User.objects.all():
             user_group_names = [group.name for group in user.groups.all()]
-            found = False
-            for user_group in user_group_names:
-                if user_group in group_names:
-                    found = True
-                    break
+            common = list(set(group_names) & set(user_group_names))
 
-            if not found:
+            if len(common) == 0:
                 self.stdout.write(f'Adding user "{user.email}" to default group.')
                 user.groups.add(default_group)
 

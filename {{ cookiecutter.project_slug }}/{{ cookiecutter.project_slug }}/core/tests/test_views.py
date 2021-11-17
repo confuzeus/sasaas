@@ -16,26 +16,18 @@ class ViewsTests(TestCase):
     def setUpTestData(cls):
         call_command("init_membership")
 
-        standard_group = Group.objects.get(
-            name=settings.MEMBERSHIP_GROUPS[settings.STANDARD_MEMBERSHIP_CODE]
-        )
-        pro_group = Group.objects.get(
-            name=settings.MEMBERSHIP_GROUPS[settings.PRO_MEMBERSHIP_CODE]
-        )
-
         standard_user = User.objects.create(
             username=fake.user_name(), email=fake.ascii_email()
         )
-        standard_user.groups.add(standard_group)
         cls.standard_user = standard_user
 
         pro_user = User.objects.create(
             username=fake.user_name(), email=fake.ascii_email()
         )
-        pro_user.groups.add(pro_group)
+        pro_user.set_membership(code=settings.PRO_MEMBERSHIP_CODE)
         cls.pro_user = pro_user
 
-    def test_standard_access(self):
+    def test_user_access(self):
 
         response = self.client.get(reverse_lazy("accounts:standard-access"))
         self.assertEqual(response.status_code, 302)

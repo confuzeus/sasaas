@@ -1,6 +1,7 @@
 import unittest.mock
 
 from django.core.exceptions import ValidationError
+from django.core.management import call_command
 from django.template.response import TemplateResponse
 from django.test import TestCase
 from django.urls import reverse_lazy
@@ -8,7 +9,7 @@ from faker import Faker
 from django.conf import settings
 from django.contrib.auth import get_user_model
 
-from {{ cookiecutter.project_slug }}.accounts import views as accounts_views
+from my_awesome_project.accounts import views as accounts_views
 
 User = get_user_model()
 
@@ -18,6 +19,7 @@ fake = Faker()
 class AccountsViewsTests(TestCase):
     @classmethod
     def setUpTestData(cls):
+        call_command("init_membership")
         cls.user = User.objects.create(
             username=fake.user_name(), email=fake.ascii_email()
         )

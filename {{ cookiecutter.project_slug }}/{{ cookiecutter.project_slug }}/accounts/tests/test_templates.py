@@ -6,6 +6,7 @@ from allauth.socialaccount.models import SocialApp
 from django.contrib.auth import get_user_model
 from django.contrib.sessions.middleware import SessionMiddleware
 from django.contrib.sites.models import Site
+from django.core.management import call_command
 from django.template.response import TemplateResponse
 from django.test import TestCase, RequestFactory
 from faker import Faker
@@ -22,6 +23,7 @@ class AForm(forms.Form):
 class AccountsTemplatesTests(TestCase):
     @classmethod
     def setUpTestData(cls):
+        call_command("init_membership")
         factory = RequestFactory()
         cls.factory = factory
         cls.user = User.objects.create(

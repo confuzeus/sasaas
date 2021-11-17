@@ -21,18 +21,13 @@ def group_required(
 
             if request.user.is_authenticated:
 
-                user_group_names = [group.name for group in request.user.groups.all()]
+                user_membership_group_name = settings.MEMBERSHIP_GROUPS[
+                    request.user.membership_code
+                ]["group_name"]
 
                 allowed_groups = settings.VIEW_PERMISSION_GROUPS[view_id]
 
-                found = False
-
-                for group in user_group_names:
-                    if group in allowed_groups:
-                        found = True
-                        break
-
-                if not found:
+                if not (user_membership_group_name in allowed_groups):
                     path, resolved_login_url = build_redirect_path(
                         request, login_url=settings.UPGRADE_URL
                     )

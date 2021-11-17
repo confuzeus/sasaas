@@ -171,6 +171,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "{{ cookiecutter.project_slug }}.accounts.middleware.UserMembershipMiddleware",
 ]
 
 if DEBUG or TEST:
@@ -549,19 +550,33 @@ PRO_MEMBERSHIP_CODE = "pro"
 # Dummy membership groups
 
 MEMBERSHIP_GROUPS = {
-    STANDARD_MEMBERSHIP_CODE: "Standard members",
-    PRO_MEMBERSHIP_CODE: "Pro members",
+    STANDARD_MEMBERSHIP_CODE: {
+        "name": "Standard",
+        "group_name": "Standard members",
+        "recurring": False,
+        "trial": False,
+    },
+    PRO_MEMBERSHIP_CODE: {
+        "name": "Pro",
+        "group_name": "Pro members",
+        "recurring": True,
+        "trial": {
+            "enabled": True,
+            "period": "14d",
+        },
+        "period": "30d",
+    },
 }
-
-DEFAULT_MEMBERSHIP_GROUP = MEMBERSHIP_GROUPS[STANDARD_MEMBERSHIP_CODE]
+DEFAULT_MEMBERSHIP_CODE = STANDARD_MEMBERSHIP_CODE
+DEFAULT_MEMBERSHIP_GROUP = MEMBERSHIP_GROUPS[DEFAULT_MEMBERSHIP_CODE]
 
 # Some dummy permissions for views
 VIEW_PERMISSION_GROUPS = {
     "1": [
-        MEMBERSHIP_GROUPS[STANDARD_MEMBERSHIP_CODE],
-        MEMBERSHIP_GROUPS[PRO_MEMBERSHIP_CODE],
+        MEMBERSHIP_GROUPS[STANDARD_MEMBERSHIP_CODE]["group_name"],
+        MEMBERSHIP_GROUPS[PRO_MEMBERSHIP_CODE]["group_name"],
     ],
-    "2": [MEMBERSHIP_GROUPS[PRO_MEMBERSHIP_CODE]],
+    "2": MEMBERSHIP_GROUPS[PRO_MEMBERSHIP_CODE]["group_name"],
 }
 
 UPGRADE_URL = "/"
