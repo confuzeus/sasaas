@@ -1,15 +1,14 @@
 import unittest.mock
 
-from django.core.exceptions import ValidationError
+from django.conf import settings
+from django.contrib.auth import get_user_model
 from django.core.management import call_command
 from django.template.response import TemplateResponse
 from django.test import TestCase
 from django.urls import reverse_lazy
 from faker import Faker
-from django.conf import settings
-from django.contrib.auth import get_user_model
 
-from my_awesome_project.accounts import views as accounts_views
+from {{ cookiecutter.project_slug }}.accounts import views as accounts_views
 
 User = get_user_model()
 
@@ -79,3 +78,14 @@ class AccountsViewsTests(TestCase):
         self.user.refresh_from_db()
         self.assertEqual(self.user.first_name, "a")
         self.assertEqual(self.user.last_name, "b")
+
+    def test_upgrade_membership(self):
+        self.client.force_login(self.user)
+        response = self.client.get(reverse_lazy("accounts:upgrade"))
+        self.assertTemplateUsed(response, "accounts/upgrade.html")
+
+        response = self.client.post(
+            reverse_lazy("accounts:upgrade"),
+            {"upgrade_to": settings.PRO_MEMBERSHIP_CODE},
+        )
+        self.assertEqual(response.status_code, 200)

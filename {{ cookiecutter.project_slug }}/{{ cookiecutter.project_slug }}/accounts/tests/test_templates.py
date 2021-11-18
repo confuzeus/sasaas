@@ -186,3 +186,8 @@ class AccountsTemplatesTests(TestCase):
     def test_account_settings_html(self):
         tmpl = TemplateResponse(self.request, "accounts/settings.html", self.ctx)
         self.assertTrue(tmpl.render().is_rendered)
+
+    def test_upgrade_html(self):
+        self.request.user = self.user
+        tmpl = TemplateResponse(self.request, "accounts/upgrade.html", self.ctx)
+        self.assertTrue(tmpl.render().is_rendered)

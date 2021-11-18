@@ -1,0 +1,26 @@
+{% extends "accounts/base.html" %}
+{% load membership_tags %}
+
+{% block seo_title %}
+    Upgrade your membership
+{% endblock %}
+
+{% block headline %}
+    Upgrade your membership
+{% endblock %}
+
+{% block content %}
+    {% get_trials_for_user request.user as user_trials %}
+    {% if user_trials %}
+        <div class="d-flex flex-column align-items-center mb-10">
+
+            {% for user_trial in user_trials %}
+                <form action="{% url "accounts:activate_trial" user_trial.code %}" method="POST">
+                    {% csrf_token %}
+                    <button class="btn btn-success btn-lg"
+                            type="submit">{% get_trial_message user_trial.code %}</button>
+                </form>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endblock %}

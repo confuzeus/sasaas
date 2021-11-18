@@ -1,6 +1,7 @@
 import os
 import environ
 from django.contrib import messages
+from django.urls import reverse_lazy
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -554,7 +555,7 @@ MEMBERSHIP_GROUPS = {
         "name": "Standard",
         "group_name": "Standard members",
         "recurring": False,
-        "trial": False,
+        "trial": {"enabled": False},,
     },
     PRO_MEMBERSHIP_CODE: {
         "name": "Pro",
@@ -570,6 +571,8 @@ MEMBERSHIP_GROUPS = {
 DEFAULT_MEMBERSHIP_CODE = STANDARD_MEMBERSHIP_CODE
 DEFAULT_MEMBERSHIP_GROUP = MEMBERSHIP_GROUPS[DEFAULT_MEMBERSHIP_CODE]
 
+UPGRADE_PATHS = {STANDARD_MEMBERSHIP_CODE: [PRO_MEMBERSHIP_CODE]}
+
 # Some dummy permissions for views
 VIEW_PERMISSION_GROUPS = {
     "1": [
@@ -579,4 +582,4 @@ VIEW_PERMISSION_GROUPS = {
     "2": MEMBERSHIP_GROUPS[PRO_MEMBERSHIP_CODE]["group_name"],
 }
 
-UPGRADE_URL = "/"
+UPGRADE_URL = reverse_lazy("accounts:upgrade")

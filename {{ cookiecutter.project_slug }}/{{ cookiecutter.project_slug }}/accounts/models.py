@@ -1,8 +1,14 @@
+from datetime import datetime
 from functools import cached_property
+
+from dateutil.relativedelta import relativedelta
 from django.conf import settings
+from django.core.exceptions import ImproperlyConfigured
+from django.db import models
 from django.contrib.auth.models import AbstractUser, Group
 
 from {{ cookiecutter.project_slug }}.accounts.exceptions import MultipleMemberships, NoMembership
+from {{ cookiecutter.project_slug }}.accounts.helpers import get_available_trials
 
 
 class User(AbstractUser):
@@ -59,3 +65,45 @@ class User(AbstractUser):
             raise NoMembership("A user must be part of at least one membership.")
 
         return common[0]
+
+
+class TrialRecord(models.Model):
+    MEMBERSHIP_CODE_CHOICES = [
+        (trial["code"], trial["data"]["name"]) for trial in get_available_trials()
+    ]
+    user: User = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="trial_records"
+    )
+    membership_code = models.CharField(max_length=40, choices=MEMBERSHIP_CODE_CHOICES)
+    date = models.DateTimeField(auto_now_add=True)
+    expired = models.BooleanField(default=False)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["user", "membership_code"], name="unique_trial_user_membership"
+            )
+        ]
+
+    def __str__(self):
+        return f"Trial: {self.user.email} for {self.membership_code}."
+
+    @cached_property
+    def expiry_date(self) -> datetime:
+        """
+        Get the expiry `datetime` given period as specified in settings.MEMBERSHIP_GROUPS
+        """
+        period = settings.MEMBERSHIP_GROUPS[self.membership_code]["trial"]["period"]
+        term = period[-1]
+        term_length = int(period[:-1])
+
+        if term == "d":
+            future = relativedelta(days=term_length)
+        elif term == "m":
+            future = relativedelta(months=term_length)
+        elif term == "y":
+            future = relativedelta(years=term_length)
+        else:
+            raise ImproperlyConfigured("Period must be either d, m, or y.")
+
+        return self.date + future

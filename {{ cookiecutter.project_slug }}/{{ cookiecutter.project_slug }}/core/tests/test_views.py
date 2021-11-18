@@ -48,7 +48,7 @@ class ViewsTests(TestCase):
             path = response.url.split("?")[0]
             self.assertEqual("/", path)
         else:
-            self.assertRegex(response.url, settings.UPGRADE_URL)
+            self.assertRegex(response.url, str(settings.UPGRADE_URL))
 
         self.client.force_login(self.pro_user)
         response = self.client.get(reverse_lazy("accounts:pro-access"))

@@ -7,7 +7,7 @@ from django.shortcuts import resolve_url
 
 def build_redirect_path(
     request: HttpRequest, login_url: str = settings.LOGIN_URL
-) -> tuple:
+) -> tuple:  # pragma: no cover
     """
     Return a path to redirect to the the form:
     scheme://domain/path?{redirect_field_name}={return_path}
