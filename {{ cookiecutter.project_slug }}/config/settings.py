@@ -95,7 +95,6 @@ THIRD_PARTY_APPS = [
     "allauth",
     "allauth.account",
     'allauth.socialaccount',
-    "allauth.socialaccount.providers.facebook",
     "allauth.socialaccount.providers.google",
     "crispy_forms",
     "crispy_bootstrap5",
