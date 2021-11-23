@@ -80,6 +80,12 @@ def activate_trial(request, membership_code):
     return redirect(settings.UPGRADE_URL)
 
 
+@login_required
+def wallet_view(request):
+    ctx = {}
+    return TemplateResponse(request, "accounts/wallet.html", ctx)
+
+
 # Some dummy views to illustrate memberships
 
 

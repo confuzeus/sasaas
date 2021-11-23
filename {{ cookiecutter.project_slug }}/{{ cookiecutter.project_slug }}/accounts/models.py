@@ -6,6 +6,7 @@ from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 from django.db import models
 from django.contrib.auth.models import AbstractUser, Group
+from django_countries.fields import CountryField
 
 from {{ cookiecutter.project_slug }}.accounts.exceptions import MultipleMemberships, NoMembership
 from {{ cookiecutter.project_slug }}.accounts.helpers import get_available_trials
@@ -67,6 +68,16 @@ class User(AbstractUser):
         return common[0]
 
 
+class UserProfile(models.Model):
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="profile"
+    )
+    country = CountryField(null=True)
+
+    def __str__(self):
+        return f"{self.user.email}'s profile."
+
+
 class TrialRecord(models.Model):
     MEMBERSHIP_CODE_CHOICES = [
         (trial["code"], trial["data"]["name"]) for trial in get_available_trials()
@@ -107,3 +118,13 @@ class TrialRecord(models.Model):
             raise ImproperlyConfigured("Period must be either d, m, or y.")
 
         return self.date + future
+
+
+class CreditWallet(models.Model):
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="credit_wallet"
+    )
+    credits = models.PositiveBigIntegerField(default=0)
+
+    def __str__(self):
+        return f"{self.user.username}'s wallet."

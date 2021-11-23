@@ -1,0 +1,35 @@
+{%- raw %}{% extends "accounts/base.html" %}
+{% load payment_tags %}
+{% block seo_title %}
+    {{ request.user.username }}'s credit wallet
+{% endblock %}
+
+{% block headline %}
+    {{ request.user.username }}'s credit wallet
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-4"></div>
+        <div class="col-4">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title text-center">Credits available</h5>
+                    <div class="card-text text-center">{{ request.user.credit_wallet.credits }}</div>
+                </div>
+            </div>
+            {% get_paddle_data as paddle %}
+            <button
+                    data-product="{{ paddle.credit_pack_product_id }}"
+                    data-email="{{ request.user.email }}"
+                    class="btn w-100 btn-success btn-lg js-paddle-button">Buy credits</button>
+        </div>
+        <div class="col-4"></div>
+    </div>
+
+{% endblock %}
+
+{% block js %}
+{{ block.super }}
+{% include "payments/_paddle.html" %}
+{% endblock %}{%- endraw -%}
