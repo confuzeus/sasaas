@@ -26,7 +26,7 @@ var app = (function(o, $) {
         },
 
         setupAjax: function setUpAjax() {
-            const csrfToken = getCookie('csrftoken');
+            const csrfToken = this.getCookie('csrftoken');
             $.ajaxSetup({
                 beforeSend: function (xhr) {
                 xhr.setRequestHeader("X-CSRFToken", csrfToken);
