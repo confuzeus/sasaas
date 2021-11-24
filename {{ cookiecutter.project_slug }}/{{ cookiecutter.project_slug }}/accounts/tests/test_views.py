@@ -19,9 +19,10 @@ class AccountsViewsTests(TestCase):
     @classmethod
     def setUpTestData(cls):
         call_command("init_membership")
-        cls.user = User.objects.create(
-            username=fake.user_name(), email=fake.ascii_email()
-        )
+        user = User.objects.create(username=fake.user_name(), email=fake.ascii_email())
+        user.profile.country = "MU"
+        user.profile.save()
+        cls.user = user
 
     def _assert_redirected_to_login(self, response):
         self.assertEqual(response.status_code, 302)

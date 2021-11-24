@@ -13,9 +13,10 @@ urlpatterns = [
     path(settings.ADMIN_URL, admin.site.urls),
     path("accounts/auth/password/set/", password_set_view, name="my-password-set"),
     path("accounts/auth/", include("allauth.urls")),
-    path("accounts/", include("my_awesome_project.accounts.urls")),
+    path("accounts/", include("{{ cookiecutter.project_slug }}.accounts.urls")),
     path("i18n/", include("django.conf.urls.i18n")),
     path("up/", core_views.healthcheck, name="healthcheck"),
+    path("payments/", include("{{ cookiecutter.project_slug }}.payments.urls")),
     path("", TemplateView.as_view(template_name="pages/home.html"), name="home"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

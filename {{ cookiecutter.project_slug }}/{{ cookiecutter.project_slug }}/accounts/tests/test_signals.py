@@ -14,6 +14,8 @@ class SignalsTests(TestCase):
     def setUpTestData(cls):
         call_command("init_membership")
         user = User.objects.create(username=fake.user_name(), email=fake.ascii_email())
+        user.profile.country = "MU"
+        user.profile.save()
         cls.user = user
 
     def test_update_trial_membership(self):

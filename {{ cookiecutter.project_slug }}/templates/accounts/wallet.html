@@ -22,6 +22,7 @@
             <button
                     data-product="{{ paddle.credit_pack_product_id }}"
                     data-email="{{ request.user.email }}"
+                    data-country="{{ request.user.profile.country.code }}"
                     class="btn w-100 btn-success btn-lg js-paddle-button">Buy credits</button>
         </div>
         <div class="col-4"></div>

@@ -1,16 +1,17 @@
+from allauth.account.views import PasswordSetView as AllauthPasswordSetView
 from django.conf import settings
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.template.response import TemplateResponse
-from django.contrib import messages
-from allauth.account.views import PasswordSetView as AllauthPasswordSetView
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 
 from . import forms as accounts_forms
-from .forms import MembershipUpgradeForm, TrialRecordForm
+from .forms import MembershipUpgradeForm, TrialRecordForm, UserProfileForm
 from ..core.decorators import group_required
+from ..core.utils.urls import redirect_next_or_default
 
 
 @login_required
@@ -83,7 +84,35 @@ def activate_trial(request, membership_code):
 @login_required
 def wallet_view(request):
     ctx = {}
+    payment_success = request.GET.get("success")
+    if payment_success:
+        messages.success(
+            request,
+            "Your payment has been received. Please wait for your wallet to update.",
+        )
+        return redirect("accounts:wallet")
     return TemplateResponse(request, "accounts/wallet.html", ctx)
+
+
+@login_required
+def update_user_profile(request):
+    ctx = {}
+    form = None
+    if request.method == "POST":
+        form = UserProfileForm(request.POST, instance=request.user.profile)
+
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Profile updated.")
+            return redirect_next_or_default(
+                path=request.path, default="accounts:user-settings"
+            )
+
+    if not form:
+        form = UserProfileForm(instance=request.user.profile)
+
+    ctx["form"] = form
+    return TemplateResponse(request, "accounts/update_profile.html", ctx)
 
 
 # Some dummy views to illustrate memberships

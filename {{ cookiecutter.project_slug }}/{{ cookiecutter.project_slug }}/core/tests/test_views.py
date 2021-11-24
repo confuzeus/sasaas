@@ -19,11 +19,15 @@ class ViewsTests(TestCase):
         standard_user = User.objects.create(
             username=fake.user_name(), email=fake.ascii_email()
         )
+        standard_user.profile.country = "MU"
+        standard_user.profile.save()
         cls.standard_user = standard_user
 
         pro_user = User.objects.create(
             username=fake.user_name(), email=fake.ascii_email()
         )
+        pro_user.profile.country = "MU"
+        pro_user.profile.save()
         pro_user.set_membership(code=settings.PRO_MEMBERSHIP_CODE)
         cls.pro_user = pro_user
 

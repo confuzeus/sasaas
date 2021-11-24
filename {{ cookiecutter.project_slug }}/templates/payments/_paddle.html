@@ -1,0 +1,23 @@
+{%- raw -%}{% load static %}
+{% load payment_tags %}
+
+<script src="https://cdn.paddle.com/paddle/paddle.js"></script>
+<script src="{% static "js/paddle.min.js" %}"></script>
+<script type="text/javascript">
+    {% if django_debug %}
+        Paddle.Environment.set('sandbox');
+    {% endif %}
+    {% get_paddle_data as paddle %}
+    Paddle.Setup({
+        vendor: {{ paddle.vendor_id }},
+        eventCallback: function (data) {
+            if (data.event === "Checkout.Close") {
+                paddleCloseCallback()
+            } else if (data.event === "Checkout.Complete") {
+                paddleSuccessCallback();
+            }
+        }
+    });
+    app.paddle.init();
+</script>
+{%- endraw -%}

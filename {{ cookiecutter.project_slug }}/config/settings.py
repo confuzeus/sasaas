@@ -103,6 +103,7 @@ THIRD_PARTY_APPS = [
 LOCAL_APPS = [
     '{{ cookiecutter.project_slug }}.core',
     '{{ cookiecutter.project_slug }}.accounts',
+    "{{ cookiecutter.project_slug }}.payments",
 ]
 # https://docs.djangoproject.com/en/{{ cookiecutter.django_version }}/ref/settings/#installed-apps
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -172,6 +173,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "{{ cookiecutter.project_slug }}.accounts.middleware.UserMembershipMiddleware",
+    "{{ cookiecutter.project_slug }}.accounts.middleware.CompleteUserProfileMiddleware",
 ]
 
 if DEBUG or TEST:
@@ -541,6 +543,10 @@ THUMBNAIL_REDIS_HOST = env.str("SORL_REDIS_HOST")
 
 THUMBNAIL_PRESERVE_FORMAT = True
 
+# User profile
+
+USER_PROFILE_REQUIRED_FIELDS = ["country"]
+
 # Membership
 
 # Dummy membership codes
@@ -582,3 +588,31 @@ VIEW_PERMISSION_GROUPS = {
 }
 
 UPGRADE_URL = reverse_lazy("accounts:upgrade")
+
+# Payments
+
+PADDLE_PAYMENT_SOURCE = "paddle"
+
+PAYMENT_SOURCE_CHOICES = (PADDLE_PAYMENT_SOURCE, "Paddle")
+
+CREDIT_PRODUCT_CODE = "credits"
+
+PRO_SUBSCRIPTION_PRODUCT_CODE = "pro_subscription"
+
+PRODUCT_CODE_CHOICES = (
+    (CREDIT_PRODUCT_CODE, "Credits"),
+    (PRO_SUBSCRIPTION_PRODUCT_CODE, "Pro Subscription"),
+)
+
+# Paddle
+
+PADDLE_VENDOR_ID = env.int("PADDLE_VENDOR_ID")
+
+PADDLE_CREDIT_PACK_PRODUCT_ID = env.int("PADDLE_CREDIT_PACK_PRODUCT_ID")
+
+PADDLE_CREDITS_PER_PACK = 100
+
+with open(
+    os.path.join(BASE_DIR, "paddle_pubkey.txt"), "r", encoding="UTF-8"
+) as pubkey_file:
+    PADDLE_PUBLIC_KEY = pubkey_file.read()

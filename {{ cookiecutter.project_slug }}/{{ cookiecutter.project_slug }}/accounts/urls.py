@@ -12,4 +12,5 @@ urlpatterns = [
     path("upgrade/", views.upgrade_membership, name="upgrade"),
     path("trial/<str:membership_code>/", views.activate_trial, name="activate_trial"),
     path("wallet/", views.wallet_view, name="wallet"),
+    path("profile/update/", views.update_user_profile, name="update-profile"),
 ]

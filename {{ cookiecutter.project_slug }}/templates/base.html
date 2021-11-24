@@ -34,6 +34,20 @@
 
     {% block modal %}{% endblock %}
 
+    {% block toasts %}
+      <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+          <div id="paymentCancelledToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+              <div class="toast-header">
+                  <strong class="me-auto">Payment cancelled</strong>
+                  <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+              </div>
+              <div class="toast-body">
+                  Your payment has been cancelled.
+              </div>
+          </div>
+      </div>
+    {% endblock %}
+
     {% block js %}
       <script src="{% static 'js/jquery.min.js' %}"></script>
       <script src="{% static 'js/popper.min.js' %}"></script>

@@ -2,7 +2,7 @@ from urllib.parse import urlparse
 
 from django.http import HttpRequest
 from django.conf import settings
-from django.shortcuts import resolve_url
+from django.shortcuts import resolve_url, redirect
 
 
 def build_redirect_path(
@@ -23,3 +23,17 @@ def build_redirect_path(
     ):
         path = request.get_full_path()
     return path, resolved_login_url
+
+
+def redirect_next_or_default(path: str, default: str) -> None:
+    parsed = urlparse(path)
+
+    if len(parsed.query) > 0:
+
+        qs = parse_qs(parsed.query)
+
+        next_path = qs.get("next")
+
+        if next_path is not None:
+            return redirect(next_path)
+    return redirect(default)

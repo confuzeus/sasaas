@@ -1,0 +1,18 @@
+{%- raw -%}{% extends "account/simple.html" %}
+{% load crispy_forms_filters %}
+
+{% block seo_title %}
+Update your profile
+{% endblock %}
+
+{% block headline %}
+Update your profile
+{% endblock %}
+
+{% block content %}
+    <form action="." method="POST">
+    {% csrf_token %}
+    {{ form|crispy }}
+    <button class="btn w-100 btn-success">Save</button>
+    </form>
+{% endblock %}{%- endraw -%}

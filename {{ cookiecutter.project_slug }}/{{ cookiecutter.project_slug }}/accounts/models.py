@@ -77,6 +77,19 @@ class UserProfile(models.Model):
     def __str__(self):
         return f"{self.user.email}'s profile."
 
+    @property
+    def is_complete(self) -> bool:
+        for required_field in settings.USER_PROFILE_REQUIRED_FIELDS:
+            result = getattr(self, required_field, None)
+
+            if required_field == "country":
+
+                if len(result.name) == 0:
+                    return False
+            if result is None:
+                return False
+        return True
+
 
 class TrialRecord(models.Model):
     MEMBERSHIP_CODE_CHOICES = [
