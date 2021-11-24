@@ -35,6 +35,13 @@ var app = (function(o, $) {
             });
         },
 
+        temporaryDisable: function ($elem, timeout = 3000) {
+            $elem.attr("disabled", true);
+            setTimeout(() => {
+                $elem.attr("disabled", false);
+            }, timeout);
+        },
+
         init: function initMain() {
             window.onHcaptchaSubmit = this.onHcaptchaSubmit;
         },
