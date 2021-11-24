@@ -172,7 +172,6 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "{{ cookiecutter.project_slug }}.accounts.middleware.UserMembershipMiddleware",
     "{{ cookiecutter.project_slug }}.accounts.middleware.CompleteUserProfileMiddleware",
 ]
 
