@@ -3,12 +3,15 @@ import unittest.mock
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core.management import call_command
+from django.http import HttpResponseRedirect
 from django.template.response import TemplateResponse
 from django.test import TestCase
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from faker import Faker
 
 from {{ cookiecutter.project_slug }}.accounts import views as accounts_views
+from {{ cookiecutter.project_slug }}.accounts.forms import UserProfileForm
+
 
 User = get_user_model()
 
@@ -90,3 +93,41 @@ class AccountsViewsTests(TestCase):
             {"upgrade_to": settings.PRO_MEMBERSHIP_CODE},
         )
         self.assertEqual(response.status_code, 200)
+    
+    def test_activate_trial(self):
+        self.client.force_login(self.user)
+        response = self.client.get(
+            reverse_lazy(
+                "accounts:activate_trial",
+                kwargs={"membership_code": settings.PRO_MEMBERSHIP_CODE},
+            )
+        )
+        self.assertTrue(response.url, str(settings.UPGRADE_URL))
+
+        response = self.client.post(
+            reverse_lazy(
+                "accounts:activate_trial",
+                kwargs={"membership_code": settings.PRO_MEMBERSHIP_CODE},
+            )
+        )
+        self.assertTrue(response.url, str(settings.LOGIN_REDIRECT_URL))
+
+    def test_wallet_view(self):
+        self.client.force_login(self.user)
+        response = self.client.get(reverse_lazy("accounts:wallet"))
+        self.assertTemplateUsed(response, template_name="accounts/wallet.html")
+
+        response = self.client.get(reverse("accounts:wallet") + "?success=True")
+        self.assertIsInstance(response, HttpResponseRedirect)
+
+    def test_update_user_profile(self):
+        self.client.force_login(self.user)
+        response = self.client.get(reverse_lazy("accounts:update-profile"))
+        self.assertTemplateUsed(response, "accounts/update_profile.html")
+        self.assertIsInstance(response.context["form"], UserProfileForm)
+
+        response = self.client.post(
+            reverse_lazy("accounts:update-profile"), data={"country": "AU"}
+        )
+        self.assertIsInstance(response, HttpResponseRedirect)
+        self.assertEqual(response.url, reverse("accounts:user-settings"))

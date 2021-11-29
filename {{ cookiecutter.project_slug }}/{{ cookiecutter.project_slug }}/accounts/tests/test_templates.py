@@ -26,9 +26,10 @@ class AccountsTemplatesTests(TestCase):
         call_command("init_membership")
         factory = RequestFactory()
         cls.factory = factory
-        cls.user = User.objects.create(
-            username=fake.user_name(), email=fake.ascii_email()
-        )
+        user = User.objects.create(username=fake.user_name(), email=fake.ascii_email())
+        user.profile.country = "MU"
+        user.profile.save()
+        cls.user = user
         request = factory.get("/")
         middleware = SessionMiddleware()
         middleware.process_request(request)
@@ -190,4 +191,9 @@ class AccountsTemplatesTests(TestCase):
     def test_upgrade_html(self):
         self.request.user = self.user
         tmpl = TemplateResponse(self.request, "accounts/upgrade.html", self.ctx)
+        self.assertTrue(tmpl.render().is_rendered)
+    
+    def test_wallet_html(self):
+        self.request.user = self.user
+        tmpl = TemplateResponse(self.request, "accounts/wallet.html", self.ctx)
         self.assertTrue(tmpl.render().is_rendered)
