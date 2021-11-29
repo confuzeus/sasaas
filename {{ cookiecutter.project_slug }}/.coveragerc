@@ -16,6 +16,7 @@ omit =
     */settings_*.py
     */venv/*
     *migrations*
+    paddle_pubkey.txt
 branch = True
 plugins =
     django_coverage_plugin
