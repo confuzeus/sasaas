@@ -1,4 +1,4 @@
-from urllib.parse import urlparse
+from urllib.parse import urlparse, parse_qs
 
 from django.http import HttpRequest, HttpResponseRedirect
 from django.conf import settings
