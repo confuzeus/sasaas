@@ -6,7 +6,7 @@ from django.views import defaults as default_views
 from django.views.generic import TemplateView
 
 from {{ cookiecutter.project_slug }}.core import views as core_views
-from my_awesome_project.accounts.views import password_set_view
+from {{ cookiecutter.project_slug }}.accounts.views import password_set_view
 
 urlpatterns = [
     re_path(r'^robots\.txt', include('robots.urls')),
