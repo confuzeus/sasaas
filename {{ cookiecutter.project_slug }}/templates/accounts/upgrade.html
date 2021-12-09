@@ -1,4 +1,4 @@
-{% extends "accounts/base.html" %}
+{%- raw -%}{% extends "accounts/base.html" %}
 {% load membership_tags %}
 
 {% block seo_title %}
@@ -23,4 +23,4 @@
             {% endfor %}
         </div>
     {% endif %}
-{% endblock %}
+{% endblock %}{%- endraw -%}
