@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as AuthUserAdmin
 
-from my_awesome_project.accounts.models import TrialRecord, User, UserProfile
+from {{ cookiecutter.project_slug }}.accounts.models import TrialRecord, User, UserProfile
 
 
 class UserProfileInline(admin.TabularInline):
