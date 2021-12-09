@@ -2,7 +2,7 @@ import unittest.mock
 from django.test import TestCase
 from django import forms
 
-from {{ cookieuctter.project_slug }}.core.mixins import form_mixins
+from {{ cookiecutter.project_slug }}.core.mixins import form_mixins
 
 
 class HCaptchaForm(form_mixins.HcaptchaFormMixin, forms.Form):
