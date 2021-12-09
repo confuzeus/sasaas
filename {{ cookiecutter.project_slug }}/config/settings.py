@@ -559,7 +559,7 @@ MEMBERSHIP_GROUPS = {
         "name": "Standard",
         "group_name": "Standard members",
         "recurring": False,
-        "trial": {"enabled": False},,
+        "trial": {"enabled": False},
     },
     PRO_MEMBERSHIP_CODE: {
         "name": "Pro",
