@@ -3,7 +3,7 @@ from unittest.mock import Mock
 from django.conf import settings
 from django.test import TestCase, RequestFactory
 
-from my_awesome_project.accounts import adapters
+from {{ cookiecutter.project_slug }}.accounts import adapters
 
 
 class AdaptersTests(TestCase):

@@ -1,7 +1,7 @@
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.views.decorators.csrf import csrf_exempt
 
-from my_awesome_project.payments.utils import Paddle
+from {{ cookiecutter.project_slug }}.payments.utils import Paddle
 
 
 @csrf_exempt

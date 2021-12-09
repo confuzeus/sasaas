@@ -40,7 +40,7 @@ def update_trial_membership(sender, instance, created, **kwargs):
     if created:
         instance.user.set_membership(instance.membership_code)
         schedule(
-            "my_awesome_project.accounts.utils.expire_trial",
+            "{{ cookiecutter.project_slug }}.accounts.utils.expire_trial",
             instance.pk,
             name=f"Expire {str(instance)}",
             schedule_type="O",

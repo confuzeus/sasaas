@@ -439,26 +439,26 @@ ACCOUNT_EMAIL_REQUIRED = True
 
 ACCOUNT_EMAIL_VERIFICATION = "mandatory"
 
-ACCOUNT_ADAPTER = "my_awesome_project.accounts.adapters.AccountAdapter"
+ACCOUNT_ADAPTER = "{{ cookiecutter.project_slug }}.accounts.adapters.AccountAdapter"
 
 ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True
 
 ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = False
 
-SOCIALACCOUNT_ADAPTER = "my_awesome_project.accounts.adapters.SocialAccountAdapter"
+SOCIALACCOUNT_ADAPTER = "{{ cookiecutter.project_slug }}.accounts.adapters.SocialAccountAdapter"
 
 ACCOUNT_LOGIN_ON_PASSWORD_RESET = True
 
 ACCOUNT_PRESERVE_USERNAME_CASING = False
 
 ACCOUNT_FORMS = {
-    "login": "my_awesome_project.accounts.forms.LoginForm",
-    "signup": "my_awesome_project.accounts.forms.SignupForm",
+    "login": "{{ cookiecutter.project_slug }}.accounts.forms.LoginForm",
+    "signup": "{{ cookiecutter.project_slug }}.accounts.forms.SignupForm",
     # 'add_email': 'allauth.account.forms.AddEmailForm',
-    "change_password": "my_awesome_project.accounts.forms.ChangePasswordForm",
+    "change_password": "{{ cookiecutter.project_slug }}.accounts.forms.ChangePasswordForm",
     # 'set_password': 'allauth.account.forms.SetPasswordForm',
-    "reset_password": "my_awesome_project.accounts.forms.ResetPasswordForm",
-    "reset_password_from_key": "my_awesome_project.accounts.forms.ResetPasswordKeyForm",
+    "reset_password": "{{ cookiecutter.project_slug }}.accounts.forms.ResetPasswordForm",
+    "reset_password_from_key": "{{ cookiecutter.project_slug }}.accounts.forms.ResetPasswordKeyForm",
     # 'disconnect': 'allauth.socialaccount.forms.DisconnectForm',
 }
 

@@ -1,7 +1,7 @@
 from django.test import TestCase, RequestFactory
 from django.conf import settings
 
-from {{ cookiecutter.project_slug }}}}.core import context_processors
+from {{ cookiecutter.project_slug }}.core import context_processors
 
 
 class ContextProcessorTests(TestCase):

@@ -7,7 +7,7 @@ from django.http import QueryDict
 from django.test import TestCase, RequestFactory
 from django.urls import NoReverseMatch
 
-from my_awesome_project.core.templatetags import (
+from {{ cookiecutter.project_slug }}.core.templatetags import (
     url_tags,
     pagination_tags,
     useful_filters,
@@ -16,7 +16,7 @@ from my_awesome_project.core.templatetags import (
 
 class UrlTagsTestCase(TestCase):
     """
-    Test the url_tags module in my_awesome_project.core.templatetags package.
+    Test the url_tags module in {{ cookiecutter.project_slug }}.core.templatetags package.
     """
 
     @classmethod
@@ -94,7 +94,7 @@ class UrlTagsTestCase(TestCase):
 
 
 class PaginationTagsTestCase(TestCase):
-    """Test the pagination_tags module in the apps.core.templatetags
+    """Test the pagination_tags module in the {{ cookiecutter.project_slug }}.core.templatetags
     package.
     """
 
@@ -376,7 +376,7 @@ class PaginationTagsTestCase(TestCase):
 
 class UsefulFiltersTestCase(TestCase):
     """
-    Test the usefil_filters module in the apps.core.templatetags package.
+    Test the usefil_filters module in the {{ cookiecutter.project_slug }}.core.templatetags package.
     """
 
     def test_is_number(self):
