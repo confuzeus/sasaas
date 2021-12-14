@@ -12,3 +12,14 @@ services:
     ports:
       - "${BROWSERSYNC_PORT}:${DOCKER_BROWSERSYNC_PORT}"
       - "${BROWSERSYNC_UI_PORT}:${DOCKER_BROWSERSYNC_UI_PORT}"
+
+  piptools:
+    volumes:
+      - ./requirements:/app/requirements
+    build:
+      context: .
+      args:
+        DOCKER_UID: ${DOCKER_UID}
+        DOCKER_GID: ${DOCKER_GID}
+    command: compile.sh
+    env_file: .env
