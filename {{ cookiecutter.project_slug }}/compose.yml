@@ -1,3 +1,6 @@
+volumes:
+  local_postgres_data: {}
+
 services:
 
   node:
@@ -7,6 +10,7 @@ services:
       context: .
       args:
         DOCKER_BROWSERSYNC_PORT: ${DOCKER_BROWSERSYNC_PORT}
+      target: node
     command: npm run dev
     env_file: .env
     ports:
@@ -21,5 +25,22 @@ services:
       args:
         DOCKER_UID: ${DOCKER_UID}
         DOCKER_GID: ${DOCKER_GID}
+      target: piptools
     command: compile.sh
     env_file: .env
+
+  mailhog:
+    image: mailhog/mailhog:v1.0.0
+    container_name: mailhog
+    ports:
+      - "${MAILHOG_PORT:-8025}:${DOCKER_MAILHOG_PORT:-8025}"
+
+  redis:
+    image: redis:6
+    container_name: redis
+
+  postgres:
+    image: postgres:14
+    env_file: .env
+    volumes:
+      - local_postgres_data:/var/lib/postgresql/data

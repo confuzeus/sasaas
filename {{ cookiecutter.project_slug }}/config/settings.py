@@ -320,7 +320,7 @@ EMAIL_SUBJECT_PREFIX = env(
 
 if DEBUG:
     EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-    EMAIL_HOST = env.str("DJANGO_SMTP_HOST", default="localhost")
+    EMAIL_HOST = env.str("DJANGO_SMTP_HOST", default="mailhog")
     EMAIL_PORT = env.int("DJANGO_SMTP_PORT", default=1025)
 else:
     EMAIL_BACKEND = "anymail.backends.amazon_ses.EmailBackend"
