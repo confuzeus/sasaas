@@ -1,9 +1,32 @@
+x-base: &base
+  env_file: .env
+
+x-base-debug: &basedebug
+  <<: *base
+  profiles:
+    - debug
+
+x-django-debug: &djdebug
+  <<: *basedebug
+  build:
+    context: .
+    target: djangodebug
+  volumes:
+    - .:/app
+  depends_on:
+    - mailhog
+    - redis
+    - postgres
+
+
+
 volumes:
   local_postgres_data: {}
 
 services:
 
   node:
+    <<: *basedebug
     volumes:
       - .:/app
     build:
@@ -12,12 +35,12 @@ services:
         DOCKER_BROWSERSYNC_PORT: ${DOCKER_BROWSERSYNC_PORT}
       target: node
     command: npm run dev
-    env_file: .env
     ports:
       - "${BROWSERSYNC_PORT}:${DOCKER_BROWSERSYNC_PORT}"
       - "${BROWSERSYNC_UI_PORT}:${DOCKER_BROWSERSYNC_UI_PORT}"
 
   piptools:
+    <<: *basedebug
     volumes:
       - ./requirements:/app/requirements
     build:
@@ -26,21 +49,35 @@ services:
         DOCKER_UID: ${DOCKER_UID}
         DOCKER_GID: ${DOCKER_GID}
       target: piptools
-    command: compile.sh
-    env_file: .env
 
   mailhog:
+    <<: *basedebug
     image: mailhog/mailhog:v1.0.0
     container_name: mailhog
     ports:
       - "${MAILHOG_PORT:-8025}:${DOCKER_MAILHOG_PORT:-8025}"
 
   redis:
+    <<: *base
     image: redis:6
+    profiles:
+      - debug
+      - prod
     container_name: redis
 
   postgres:
+    <<: *base
     image: postgres:14
-    env_file: .env
+    profiles:
+      - debug
+      - prod
     volumes:
       - local_postgres_data:/var/lib/postgresql/data
+
+  djangodebug:
+    <<: *djdebug
+    command: /start
+
+  djangoqdebug:
+    <<: *djdebug
+    command: python manage.py qcluster

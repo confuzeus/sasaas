@@ -118,9 +118,9 @@ function initBrowserSync() {
 
   let proxy;
   if (https) {
-    proxy = `https://django:${process.env.DOCKER_DJANGO_PORT}`
+    proxy = `https://djangodebug:${process.env.DOCKER_DJANGO_PORT}`
   } else {
-    proxy = `http://django:${process.env.DOCKER_DJANGO_PORT}`
+    proxy = `http://djangodebug:${process.env.DOCKER_DJANGO_PORT}`
   }
   browserSync.init({
     ui: {

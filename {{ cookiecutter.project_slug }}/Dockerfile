@@ -43,3 +43,48 @@ USER python
 RUN pip install --user pip-tools
 
 ENV PATH /home/python/.local/bin:$PATH
+
+FROM python:3.10-slim-bullseye AS djangobase
+
+ARG DOCKER_UID=1000
+ARG DOCKER_GID=1000
+
+ENV PYTHONUNBUFFERED 1
+ENV PYTHONDONTWRITEBYTECODE 1
+
+RUN apt-get update && apt-get install --no-install-recommends -y \
+  libpq-dev \
+  gettext \
+  graphicsmagick \
+  libjpeg-dev \
+  zlib1g-dev \
+  && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
+  && rm -rf /var/lib/apt/lists/*
+
+RUN addgroup --gid $DOCKER_GID django && \
+    adduser --gid $DOCKER_GID --uid $DOCKER_UID --disabled-password \
+     --gecos '' django
+
+COPY requirements /app/requirements
+
+COPY docker/django-entrypoint.sh /entrypoint
+RUN sed -i 's/\r$//g' /entrypoint
+RUN chmod +x /entrypoint
+
+WORKDIR /app
+
+ENV PATH /home/django/.local/bin:$PATH
+
+FROM djangobase AS djangodebug
+
+COPY docker/django-debug-start.sh /start
+RUN sed -i 's/\r$//g' /start
+RUN chmod +x /start
+
+USER django
+
+RUN pip install --user pip-tools
+
+RUN pip-sync requirements/base.txt requirements/dev.txt --pip-args "--user"
+
+ENTRYPOINT ["/entrypoint"]
