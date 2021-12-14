@@ -1,0 +1,14 @@
+services:
+
+  node:
+    volumes:
+      - .:/app
+    build:
+      context: .
+      args:
+        DOCKER_BROWSERSYNC_PORT: ${DOCKER_BROWSERSYNC_PORT}
+    command: npm run dev
+    env_file: .env
+    ports:
+      - "${BROWSERSYNC_PORT}:${DOCKER_BROWSERSYNC_PORT}"
+      - "${BROWSERSYNC_UI_PORT}:${DOCKER_BROWSERSYNC_UI_PORT}"

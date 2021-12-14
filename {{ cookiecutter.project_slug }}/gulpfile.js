@@ -118,15 +118,15 @@ function initBrowserSync() {
 
   let proxy;
   if (https) {
-    proxy = "https://127.0.0.1:8000"
+    proxy = `https://django:${process.env.DOCKER_DJANGO_PORT}`
   } else {
-    proxy = "http://127.0.0.1:8000"
+    proxy = `http://django:${process.env.DOCKER_DJANGO_PORT}`
   }
   browserSync.init({
     ui: {
-      port: 3001
+      port: parseInt(process.env.DOCKER_BROWSERSYNC_UI_PORT)
     },
-    port: 3000,
+    port: parseInt(process.env.DOCKER_BROWSERSYNC_PORT),
     proxy: proxy,
     open: false,
     https: https,
