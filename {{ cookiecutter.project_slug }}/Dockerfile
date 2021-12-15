@@ -53,6 +53,7 @@ ENV PYTHONUNBUFFERED 1
 ENV PYTHONDONTWRITEBYTECODE 1
 
 RUN apt-get update && apt-get install --no-install-recommends -y \
+  build-essential \
   libpq-dev \
   gettext \
   graphicsmagick \
@@ -86,5 +87,23 @@ USER django
 RUN pip install --user pip-tools
 
 RUN pip-sync requirements/base.txt requirements/dev.txt --pip-args "--user"
+
+ENTRYPOINT ["/entrypoint"]
+
+FROM djangobase AS djangoprod
+
+COPY docker/django-prod-start.sh /start
+RUN sed -i 's/\r$//g' /start
+RUN chmod +x /start
+
+COPY . /app
+
+RUN chown -R django:django /app
+
+USER django
+
+RUN pip install --user pip-tools
+
+RUN pip-sync requirements/base.txt requirements/prod.txt --pip-args "--user"
 
 ENTRYPOINT ["/entrypoint"]

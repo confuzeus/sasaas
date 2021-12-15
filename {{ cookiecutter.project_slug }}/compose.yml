@@ -6,6 +6,11 @@ x-base-debug: &basedebug
   profiles:
     - debug
 
+x-base-prod: &base-prod
+  <<: *base
+  profiles:
+    - prod
+
 x-django-debug: &djdebug
   <<: *basedebug
   build:
@@ -18,7 +23,20 @@ x-django-debug: &djdebug
     - redis
     - postgres
 
-
+x-django: &djprod
+  <<: *base-prod
+  build:
+    context: .
+    target: djangoprod
+    args:
+      DOCKER_UID: 5000
+      DOCKER_GID: 5000
+  environment:
+    - DJANGO_DEBUG=0
+  image: ${DOCKER_PROD_IMAGE}
+  depends_on:
+    - redis
+    - postgres
 
 volumes:
   local_postgres_data: {}
@@ -80,4 +98,12 @@ services:
 
   djangoqdebug:
     <<: *djdebug
+    command: python manage.py qcluster
+
+  djangoprod:
+    <<: *djprod
+    command: /start
+
+  djangoqprod:
+    <<: *djprod
     command: python manage.py qcluster
