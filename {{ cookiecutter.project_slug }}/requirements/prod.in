@@ -3,6 +3,7 @@
 -c ./base.txt
 
 gunicorn  # https://github.com/benoitc/gunicorn
+uvicorn[standard]>=0.15.0  # https://github.com/encode/uvicorn
 psycopg2 --no-binary psycopg2  # https://github.com/psycopg/psycopg2
 
 # Django
