@@ -57,17 +57,6 @@ services:
       - "${BROWSERSYNC_PORT}:${DOCKER_BROWSERSYNC_PORT}"
       - "${BROWSERSYNC_UI_PORT}:${DOCKER_BROWSERSYNC_UI_PORT}"
 
-  piptools:
-    <<: *basedebug
-    volumes:
-      - ./requirements:/app/requirements
-    build:
-      context: .
-      args:
-        DOCKER_UID: ${DOCKER_UID}
-        DOCKER_GID: ${DOCKER_GID}
-      target: piptools
-
   mailhog:
     <<: *basedebug
     image: mailhog/mailhog:v1.0.0
