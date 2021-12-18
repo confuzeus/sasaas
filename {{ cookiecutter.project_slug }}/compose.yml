@@ -63,6 +63,17 @@ services:
     container_name: mailhog
     ports:
       - "${MAILHOG_PORT:-8025}:${DOCKER_MAILHOG_PORT:-8025}"
+  
+  piptools:
+    <<: *basedebug
+    volumes:
+      - ./requirements:/app/requirements
+    build:
+      context: .
+      args:
+        DOCKER_UID: ${DOCKER_UID}
+        DOCKER_GID: ${DOCKER_GID}
+      target: piptools
 
   redis:
     <<: *base
