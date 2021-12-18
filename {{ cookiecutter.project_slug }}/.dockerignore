@@ -10,6 +10,7 @@ package-lock.json
 package.json
 staticSrc
 paddle_pubkey.sample.txt
+paddle_pubkey.txt
 service-account-creds.json
 .coveragerc
 media
