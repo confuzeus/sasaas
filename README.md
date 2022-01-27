@@ -1,5 +1,9 @@
 # Launch your SaaS MVP yesterday
 
+**This project is no longer active.**
+
+I'm working on a new and improved boilerplate. It will be available at [https://github.com/confuzeus/bango](https://github.com/confuzeus/bango)
+
 Time to market is of essence when developing your MVP.
 
 If you take too long, you lose motivation and potential market advantages.
